@@ -41,10 +41,13 @@
         </div>
       </section>
       <section class="py-10 account-area">
-        <div class="container mb-6">
+        <div class="container mb-6 flex items-center justify-between">
           <h2 class="text-4xl text-center font-bold uppercase">
             <span class="text-orange-500">Bank</span> Details
           </h2>
+          <button class="bg-red-500 p-2 px-5 rounded text-white font-bold transition-all hover:bg-red-600" id="logout">
+            Logout
+          </button>
         </div>
 
         <div class="container my-10">
@@ -54,7 +57,7 @@
                 Deposit
               </h2>
               <h2 class="text-4xl font-bold uppercase text-white text-center">
-                $<span>00</span>
+                $<span id="depositAmount">00</span>
               </h2>
             </div>
             <div class="col-span-1 bg-orange-500 p-5 rounded-lg">
@@ -62,7 +65,7 @@
                 Widthdraw
               </h2>
               <h2 class="text-4xl font-bold uppercase text-white text-center">
-                $<span>00</span>
+                $<span id="widthdrawAmount">00</span>
               </h2>
             </div>
             <div class="col-span-1 bg-sky-500 p-5 rounded-lg">
@@ -70,7 +73,7 @@
                 Balance
               </h2>
               <h2 class="text-4xl font-bold uppercase text-white text-center">
-                $<span>1250</span>
+                $<span id="balanceAmount">1250</span>
               </h2>
             </div>
           </div>
@@ -79,19 +82,19 @@
         <div class="container mt-10">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div class="col-span-1 bg-sky-500 p-10 rounded-lg">
-              <form>
+              <form id="depositForm">
                 <div class="my-5">
-                  <label for="Deposit" class="block my-2 text-white text-2xl">Deposit Amount</label>
-                  <input type="number" name="Deposit" id="Deposit" class="block w-full border-none placeholder:text-xs px-5 p-2 rounded focus:outline-none" placeholder="Deposit Amount">
+                  <label for="deposit-field" class="block my-2 text-white text-2xl">Deposit Amount</label>
+                  <input type="number" name="Deposit" id="deposit-field" class="block w-full border-none placeholder:text-xs px-5 p-2 rounded focus:outline-none" placeholder="Deposit Amount">
                 </div>
                 <input type="submit" value="Deposit" class="bg-white p-2 px-5 rounded text-gray-400 text-sm cursor-pointer">
               </form>
             </div>
             <div class="col-span-1 bg-sky-500 p-10 rounded-lg">
-              <form>
+              <form id="widthdrawForm">
                 <div class="my-5">
-                  <label for="widthdraw" class="block my-2 text-white text-2xl">Widthdraw Amount</label>
-                  <input type="number" name="widthdraw" id="widthdraw" class="block w-full border-none placeholder:text-xs px-5 p-2 rounded focus:outline-none" placeholder="Widthdraw Amount">
+                  <label for="widthdraw-field" class="block my-2 text-white text-2xl">Widthdraw Amount</label>
+                  <input type="number" name="widthdraw" id="widthdraw-field" class="block w-full border-none placeholder:text-xs px-5 p-2 rounded focus:outline-none" placeholder="Widthdraw Amount">
                 </div>
                 <input type="submit" value="Widthdraw" class="bg-white p-2 px-5 rounded text-gray-400 text-sm cursor-pointer">
               </form>
