@@ -3,39 +3,45 @@ const accountArea = document.querySelector(".account-area");
 const accountEmail = "hello@gmail.com";
 const accountPassword = "111";
 
-// LOGIN AREA
+// LOGIN
 const loginData = document.querySelector("#login-data");
 const email = document.querySelector("#email");
 const password = document.querySelector("#password");
 const errorMsg = document.querySelector("#error");
 const logoutBtn = document.querySelector("#logout");
 
-//LOGIN USER
-localStorage.getItem("user")
-  ? (loginArea.style.display = "none")
-  : (accountArea.style.display = "none");
-errorMsg.style.display = "none";
+// USER VERIFY FUNCTION
 
-function createNewUser({ email, password }) {
+function verifyUser() {
+  localStorage.getItem("user")
+    ? (loginArea.style.display = "none")
+    : (accountArea.style.display = "none");
+  errorMsg.style.display = "none";
+}
+verifyUser();
+
+//LOGIN USER
+
+function loginUser(email, password) {
   localStorage.setItem(
     "user",
     JSON.stringify({
-      email,
-      password,
+      email: email.value,
+      password: password.value,
     })
   );
+  loginArea.style.display = "none";
+  accountArea.style.display = "block";
+  errorMsg.style.display = "none";
+  email.value = "";
+  password.value = "";
 }
 
 loginData.addEventListener("submit", (event) => {
   event.preventDefault();
 
   if (email.value === accountEmail && password.value === accountPassword) {
-    createNewUser(email.value, password.value);
-    loginArea.style.display = "none";
-    accountArea.style.display = "block";
-    errorMsg.style.display = "none";
-    email.value = "";
-    password.value = "";
+    loginUser(email, password);
   } else {
     errorMsg.style.display = "block";
   }
@@ -49,58 +55,76 @@ logoutBtn.addEventListener("click", function () {
   accountArea.style.display = "none";
 });
 
-// STRING TO NUMBER CONVERTER FUNCTION
+// GET THE INPUT VALUE WITH NUMBER FORMAT FUNCTION
 
-function strToNumber(str) {
-  return parseFloat(str);
+function getInputValueById(inputId) {
+  const inputField = document.getElementById(inputId);
+  const inputValue = parseFloat(inputField.value);
+  return inputValue;
+}
+// GET THE TEXT VALUE WITH NUMBER FORMAT FUNCTION
+
+function getTextValueById(textFieldId) {
+  const textField = document.getElementById(textFieldId);
+  const textValue = parseFloat(textField.innerText);
+  return textValue;
 }
 
-// ADD DEPOSIT AMOUT AND UPDATE BALANCE
-const balanceAmount = document.getElementById("balanceAmount");
+// GET THE ELEMENT BY ID AND SET INNERTEXT FUNCTION
 
-const depositAmount = document.getElementById("depositAmount");
-const depositForm = document.getElementById("depositForm");
-const depositField = document.getElementById("deposit-field");
+function getElementById(elementId, value) {
+  const element = document.getElementById(elementId);
+  element.innerText = value;
+}
 
-depositForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const depositValue = strToNumber(depositField.value);
-  const depositAmountValue = strToNumber(depositAmount.innerText);
-  const balanceAmountValue = strToNumber(balanceAmount.innerText);
+function bankCalculateBalance(
+  type,
+  formId,
+  typeField,
+  typeAmount,
+  balanceAmount
+) {
+  document.getElementById(formId).addEventListener("submit", (e) => {
+    e.preventDefault();
+    const inputValue = getInputValueById(typeField);
+    const amountValue = getTextValueById(typeAmount);
+    const balanceAmountValue = getTextValueById(balanceAmount);
 
-  if (depositValue <= 0 || !depositValue) {
-    alert(`Please Add Your Deposit Amount!`);
-    depositField.value = "";
-    return;
-  } else {
-    depositAmount.innerText = depositAmountValue + depositValue;
-    balanceAmount.innerText = balanceAmountValue + depositValue;
-    depositField.value = "";
-  }
-});
+    if (inputValue <= 0 || !inputValue) {
+      type === "deposit"
+        ? alert(`Please Add Your Deposit Amount!`)
+        : alert(`Please Widthdraw Your Amount!`);
+      inputValue = "";
+      return;
+    } else if (balanceAmountValue < inputValue) {
+      alert(`You cannot withdraw more than ${balanceAmountValue}`);
+      inputValue = "";
+      return;
+    } else {
+      const amountTotal = amountValue + inputValue;
+      const balanceAmountTotal =
+        type === "deposit"
+          ? balanceAmountValue + inputValue
+          : balanceAmountValue - inputValue;
+      getElementById(typeAmount, amountTotal);
+      getElementById(balanceAmount, balanceAmountTotal);
+      inputValue = "";
+    }
+  });
+}
 
-// ADD WIDTHDRAW AMOUT AND UPDATE BALANCE
-const widthdrawForm = document.getElementById("widthdrawForm");
-const widthdrawField = document.getElementById("widthdraw-field");
-const widthdrawAmount = document.getElementById("widthdrawAmount");
+bankCalculateBalance(
+  "deposit",
+  "depositForm",
+  "deposit-field",
+  "depositAmount",
+  "balanceAmount"
+);
 
-widthdrawForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const widthdrawValue = strToNumber(widthdrawField.value);
-  const widthdrawAmountValue = strToNumber(widthdrawAmount.innerText);
-  const balanceAmountValue = strToNumber(balanceAmount.innerText);
-
-  if (widthdrawValue <= 0 || !widthdrawValue) {
-    alert(`Please Widthdraw Your Amount!`);
-    widthdrawField.value = "";
-    return;
-  } else if (balanceAmountValue < widthdrawValue) {
-    alert(`You cannot withdraw more than ${balanceAmountValue}`);
-    widthdrawField.value = "";
-    return;
-  } else {
-    widthdrawAmount.innerText = widthdrawAmountValue + widthdrawValue;
-    balanceAmount.innerText = balanceAmountValue - widthdrawValue;
-    widthdrawField.value = "";
-  }
-});
+bankCalculateBalance(
+  "widthdraw",
+  "widthdrawForm",
+  "widthdraw-field",
+  "widthdrawAmount",
+  "balanceAmount"
+);
