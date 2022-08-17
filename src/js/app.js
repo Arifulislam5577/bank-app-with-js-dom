@@ -1,7 +1,7 @@
 const loginArea = document.querySelector(".login-area");
 const accountArea = document.querySelector(".account-area");
 const accountEmail = "hello@gmail.com";
-const accountPassword = "111";
+const accountPassword = "11111";
 
 // LOGIN
 const loginData = document.querySelector("#login-data");
@@ -60,6 +60,7 @@ logoutBtn.addEventListener("click", function () {
 function getInputValueById(inputId) {
   const inputField = document.getElementById(inputId);
   const inputValue = parseFloat(inputField.value);
+  inputField.value = "";
   return inputValue;
 }
 // GET THE TEXT VALUE WITH NUMBER FORMAT FUNCTION
@@ -90,15 +91,21 @@ function bankCalculateBalance(
     const amountValue = getTextValueById(typeAmount);
     const balanceAmountValue = getTextValueById(balanceAmount);
 
+    if (type === "widthdraw") {
+      if (!balanceAmountValue) {
+        alert(`Your Balance is ${balanceAmountValue},Please deposit!`);
+        return;
+      } else if (balanceAmountValue < inputValue) {
+        alert(`You cannot withdraw more than ${balanceAmountValue}`);
+        return;
+      }
+    }
+
     if (inputValue <= 0 || !inputValue) {
       type === "deposit"
         ? alert(`Please Add Your Deposit Amount!`)
         : alert(`Please Widthdraw Your Amount!`);
-      inputValue = "";
-      return;
-    } else if (balanceAmountValue < inputValue) {
-      alert(`You cannot withdraw more than ${balanceAmountValue}`);
-      inputValue = "";
+
       return;
     } else {
       const amountTotal = amountValue + inputValue;
@@ -108,7 +115,6 @@ function bankCalculateBalance(
           : balanceAmountValue - inputValue;
       getElementById(typeAmount, amountTotal);
       getElementById(balanceAmount, balanceAmountTotal);
-      inputValue = "";
     }
   });
 }
